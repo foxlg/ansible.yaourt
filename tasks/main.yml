@@ -8,6 +8,20 @@
       name: base-devel
       state: present
 
+- name: "Using all cpu for xz compression"
+  lineinfile:
+      dest: /etc/makepkg.conf
+      state: present
+      regexp: "^COMPRESSXZ="
+      line: "COMPRESSXZ=(xz -T0 -c -z -)"
+
+- name: "Set make glafs for all cpus"
+  lineinfile:
+      dest: /etc/makepkg.conf
+      state: present
+      regexp: '^MAKEFLAGS'
+      line: 'MAKEFLAGS="-j"'
+
 - name: "add archlinux.fr repository to pacman"
   lineinfile:
     dest: "/etc/pacman.conf"
