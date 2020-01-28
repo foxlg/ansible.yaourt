@@ -15,19 +15,16 @@
   tags:
     - packages
     
-#- name: "install yaourt"
-#  pacman:
-#    name: "yaourt"
-#    state: "present"
-#  when: ansible_distribution == "Archlinux"
-#  tags:
-#    - packages
-#
-- name: "install packaue-query"
+- name: "Clone packaue-query"
   git:
       repo: https://aur.archlinux.org/package-query.git
-      dest: /tmp/
+      dest: /tmp/package-query
       version: master
+  when: ansible_distribution == "Archlinux"
+  tags:
+    - packages
+
+- name: "install packaue-query"
   shell:
       cmd: makepkg -si
       chdir: /tmp/package-query
@@ -35,11 +32,16 @@
   tags:
     - packages
 
-- name: "install yaourt from git"
+- name: "Clone yaourt from git"
   git:
       repo: git clone https://aur.archlinux.org/yaourt.git
-      dest: /tmp/
+      dest: /tmp/yaourt
       version: master
+  when: ansible_distribution == "Archlinux"
+  tags:
+    - packages
+
+- name: "install yaourt from git"
   shell:
       cmd: makepkg -si
       chdir: /tmp/yaourt
