@@ -2,6 +2,12 @@
 # tasks file for sbaerlocher.yaourt
 - debug:
     msg: "ansible_distribution {{ ansible_distribution }}  ansible_os_family {{ ansible_os_family }}"
+
+- name: "Install base-devel"
+  package:
+      name: base-devel
+      state: present
+
 - name: "add archlinux.fr repository to pacman"
   lineinfile:
     dest: "/etc/pacman.conf"
@@ -14,20 +20,24 @@
   when: ansible_distribution == "Archlinux"
   tags:
     - packages
-    
+ 
 - name: "Clone packaue-query"
   git:
       repo: https://aur.archlinux.org/package-query.git
       dest: /tmp/package-query
       version: master
+  become: yes
+  become_user: "{{ aur_user }}"
   when: ansible_distribution == "Archlinux"
   tags:
     - packages
 
 - name: "install packaue-query"
-  shell:
+  command:
       cmd: makepkg -si
       chdir: /tmp/package-query
+  become: yes
+  become_user: "{{ aur_user }}"
   when: ansible_distribution == "Archlinux"
   tags:
     - packages
@@ -37,14 +47,18 @@
       repo: git clone https://aur.archlinux.org/yaourt.git
       dest: /tmp/yaourt
       version: master
+  become: yes
+  become_user: "{{ aur_user }}"
   when: ansible_distribution == "Archlinux"
   tags:
     - packages
 
 - name: "install yaourt from git"
-  shell:
+  command:
       cmd: makepkg -si
       chdir: /tmp/yaourt
+  become: yes
+  become_user: "{{ aur_user }}"
   when: ansible_distribution == "Archlinux"
   tags:
     - packages
