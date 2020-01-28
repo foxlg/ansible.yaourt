@@ -9,7 +9,7 @@
     - "[archlinuxfr]"
     - "SigLevel = Never"
     - "Server = http://repo.archlinux.fr/$arch"
-  when: ansible_distribution == "ArchLinux"
+  when: ansible_distribution == "Archlinux"
   tags:
     - packages
     
@@ -17,6 +17,6 @@
   pacman:
     name: "yaourt"
     state: "present"
-  when: ansible_distribution == "ArchLinux"
+  when: ansible_distribution == "Archlinux"
   tags:
     - packages
